@@ -13,6 +13,8 @@ ST7789 LCD Library for ARM Cortex M (STM32) and AVR microcontrollers
 
 - #### Program Language: C
 
+- #### Requirement Libraries: [SPI Driver for AVR](https://github.com/Majid-Derhambakhsh/spi-unit) 
+               
 - #### Properties:
                - Drawing, Picture, and text functions  
                - RGB565 color format
@@ -72,10 +74,11 @@ void ST7789_PutString(uint16_t XPos, uint16_t YPos, const char *Str, ST7789_Font
 ## Guide
 
 #### This library can be used as follows:
-#### 1.  Add st7789.h header
+#### 1.  Add st7789.h and st7789_font.h header
 #### 2.  Add required headers and set up SPI and GPIO in st7789_conf.h header:
   ```c++
 #include "spi.h"
+#include "gpio.h"
 
 #define ST7789_SPI             hspi1
 
@@ -120,9 +123,45 @@ void ST7789_PutString(uint16_t XPos, uint16_t YPos, const char *Str, ST7789_Font
 #define ST7789_WIDTH     240
 #define ST7789_HEIGHT    280
 #define ST7789_ROTATION  2
+  ```
+#### 6.  Initialize ST7789, for example:     
+  ```c++
+ST7789_Init();
+  ```
+#### 7.  Use operation functions to show data on display, for example:     
+  ```c++
+ST7789_FillScreen(ST7789_COLOR_WHITE);
+ST7789_PutString(0, 0, 'Hello', Font_7x10, ST7789_COLOR_BLACK, ST7789_COLOR_WHITE);
   ``` 
       
 ## Examples  
+#### Example 1: 
+```c++  
+#include "main.h"
+#include "spi.h"
+#include "gpio.h"
+#include "st7789.h"
+#include "st7789_font.h"
+
+int main(void)
+{
+	/* Initialize SPI, GPIO, and requirement hardware */
+	Clock_Init();
+	GPIO_Init();
+	SPI_Init();
+	
+	/* ----------------- LCD Init ------------------- */
+	ST7789_Init();
+	
+	/* ----------------- Show Text ------------------ */
+	ST7789_FillScreen(ST7789_COLOR_WHITE);
+	ST7789_PutString(0, 0, "Hello", Font_16x26, ST7789_COLOR_BLACK, ST7789_COLOR_WHITE);
+	
+	while (1)
+	{
+	}
+}
+```
 
 ## Test Performed:
 - [x] STM32F1  
